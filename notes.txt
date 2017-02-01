@@ -1,0 +1,345 @@
+What the Flexbox???
+
+01_INTRO ***************************************************
+/* We start writing out flexbox here. The above is just page setup */
+.container {
+  display:flex;
+  border:10px solid goldenrod;
+  height:100vh;
+}
+
+
+02_FLEX-DIRECTION *******************************************
+.container {
+  display:flex;
+  border:10px solid goldenrod;
+  min-height:100vh;
+  /*flex-direction: row*/ /*default*/
+  flex-wrap:wrap;
+}
+
+.box {
+  width:33.3333333%;
+}
+
+
+03_FLEX-WRAPPING-COLUMNS ************************************
+note: Main axis vs. Cross axis
+.container {
+  display:flex;
+/*  flex-wrap:nowrap;*/	/*default*/
+  flex-wrap:wrap;
+/*  flex-direction:column;*/
+  border:10px solid goldenrod;
+  height:100vh;
+}
+//below used later (grow/shrink)...
+.box {
+  flex-basis:250px;
+  flex-grow:1;
+}
+
+.box3 {
+  flex-grow:5;
+}
+
+.box4 {
+  flex-basis:100px;  
+}
+
+
+04_FLEX-ORDERING *******************************************
+.container {
+  display:flex;
+}
+
+.box {
+  flex:1;
+}
+
+.box3 {
+  order:1;	/*0 is default, negative numbers is okay*/
+}
+
+.box5 {
+  order:2;
+}
+
+
+05_ALIGNMENT-CENTERING *************************************
+/*
+NOTE: (as applied to 'container'...)
+'justify-content' works on Main axis. horizontal
+'align-items' works on Cross axis. 	vertical 
+'align-content' works on Cross axis. 	vertical needs flex-wrap:wrap! should be called vertical-justify-content???
+'align-self' is overrides align-item, on case by case (FlexItem) basis.
+*/
+.container {
+  display:flex;
+  border:10px solid mistyrose;
+  height:100vh;
+/*	justify-content: flex-start*/	/*default*/
+/*	justify-content: space-between*/
+/*  align-items:stetch;*/					/*default*/
+  align-items:flex-start;
+/*	flex-wrap: wrap;*/
+/*	align-content:stretch*/ 			/*default*/
+	align-content:space-around
+}
+
+.box {
+  width:33.333%;
+}
+.box2 {
+  padding-bottom: 200px;
+}
+.box6 {
+  padding-bottom: 0;
+}
+.box9 {
+  padding-bottom: 50px;
+  align-self:stretch;
+}
+
+
+06_FLEXBOX-SIZING ****************************************
+/* 'flex container' contains 'flex items'*/
+.container {
+  display:flex;
+/*
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	align-items: flex-start;
+*/
+}
+
+.box {
+  flex:1;
+}
+
+.box2 {
+  flex:2;
+}
+
+
+07_FLEX-GROW-SHRINK **************************************
+/*
+flex
+flex-grow - default 0
+flex-shrink - default 1 (evenly shrink among flex items)
+flex-basis: 400px
+*/
+
+.container {
+  display:flex;
+}
+
+.box1 {
+  flex:10 5 400px;	/*grow shrink basis*/
+}
+
+.box2 {
+  flex:1 1 400px;	/*grow shrink basis*/
+}
+
+
+08_AUTOPREFIXER ***************************************
+npm init
+npm install gulp -g
+npm install gulp autoprefixer
+touch gulpfile.js
+...
+gulp watch
+
+
+09_FLEXBOX-NAV ***************************************
+.flex-nav ul {
+  border:1px solid black;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+	display:flex;
+}
+.flex-nav li {
+	flex:3;	/*applies to all*/
+}
+.flex-nav .social {
+	flex:1;	/*override*/
+}
+
+@media all and (max-width:1000px) {
+	.flex-nav ul {
+		flex-wrap:wrap;		/*wrap REQUIRES width (basis on flex-child-items)*/
+	}
+	.flex-nav li {
+		/*flex-basis: auto;*/	/*guess*/
+		flex:1 1 50%;
+	}
+	.flex-nav .social {	/*needed to override same (non-responsive) rule, above*/
+		flex:1 1 25%;	
+	}
+}
+
+@media all and (max-width:500px) {
+	.flex-nav ul {
+	/*flex-direction: column;*/ 	/*not good enough, here*/
+	}  
+	.flex-nav li {
+	/*flex:1 1 100%;*/	/*okay, but really only need to override basis*/
+		flex-basis: 100%;
+	}
+}
+
+
+10_MOBILE-REORDERING ***************************************
+/* Flex Container */
+.flex-nav ul {
+  border:1px solid black;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+	display:flex;
+	flex-wrap: wrap;	/*I like this here, rather than in mq*/
+}
+
+.flex-nav li { flex:3; }
+.flex-nav .social { flex:1; }
+
+@media all and (max-width:1000px) {
+	.flex-nav li { flex:1 1 50%; }
+	.flex-nav .social { flex:1 1 25%; }
+}
+
+@media all and (max-width:500px) {
+	.flex-nav li {flex-basis: 100%;}
+	/* 'order' is applied to 'flex-item's, so we need to make parent a 'flex-container'*/
+	.wrapper {display:flex; flex-direction: column;} 	/*FlexContainer*/
+/*	.flex-nav {order:-1;}*/ 	/*my way*/
+	.wrapper > * {order:9999;} 	/*FlexItems*/
+	.flex-nav {order:1;}
+	.flex-nav .toggleNav {display:block;}
+	.flex-nav ul {display:none;}
+	.flex-nav ul.open {display:flex;} 	/*see jquery at bottom of index.html*/
+	.top {order:2;}
+	.details {order:3;}
+	.signup {order:4;}
+}
+
+
+
+11_NESTING *****************************************
+/* our flex container */
+.slider-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display:flex;  /*default for align-items:stretch*/
+}
+
+/* our first flex item */
+.slider-nav li {
+  flex:2; /* THis is flex item -ish */
+/*	border: 1px solid #f00;*/  	/*for testing...*/
+  text-align: center;
+  display:flex; /* This is flex container -ish */
+}
+
+.slider-nav .arrow {  flex:1;  }
+.arrow a {  font-size: 30px;  }
+
+.slider-nav a { /*display:block width:100% was temporary*/
+  flex-basis:100%;
+  /*We want to stretch as well and center*/
+  display:flex;
+  align-items:center;
+}
+
+/* This is the flex item */
+.slider-nav span {
+  /*display: block;		/*its not a div, duh*/
+/*  width: 100%;*/
+	flex-basis:100%
+}
+
+
+12_PRICING-GRID
+/*FlexContainer*/
+.pricing-grid {
+  max-width:750px;
+  margin: 0 auto;
+  display:flex;
+	align-items: center;
+}
+/* my answer
+.plan {
+	background-color: rgba(255,255,255,.25);
+	margin: 20px;
+	padding: 20px;
+	border-radius: 4px;
+	text-align:center;
+	flex: 1;
+}
+*/
+.plan {
+	background-color: rgba(255,255,255,.25);
+	margin: 20px;
+	padding: 20px;
+	border-radius: 4px;
+	text-align:center;
+	flex: 1;
+	display:flex;
+	flex-wrap: wrap;
+}
+.plan > * {flex:1 1 100%}
+.plan .cta {align-self: flex-end;}
+
+
+13 EQUAL HIEGHT ELEMENTS *****************************
+.elements {
+  display:flex;
+  flex-wrap:wrap;
+	justify-content:space-between;  /* note flex:0 below, to distribute remaining columns*/
+}
+
+.item {
+  flex: 0 1 calc(33.33% - 20px);
+}
+
+
+14 FLEXBOX FORM
+.cover {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+
+.flex-form {
+  display:flex;
+  border:20px solid rgba(0,0,0,0.3);
+  border-radius:5px;
+}
+
+
+input[type="search"] {
+  flex-basis:500px;
+}
+
+
+15 FLEXBOX APP LAYOUT
+.app-wrap {
+	display:flex;
+	flex-direction: column;
+}
+.app-wrap > * {
+	flex:1 1 auto;
+}
+header, .icon-bar {
+	display:flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.content {
+		overflow-y: scroll;	-webkit-overflow-scrolling:touch;
+}
+
